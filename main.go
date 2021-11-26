@@ -8,7 +8,7 @@ import (
 
 func home(w http.ResponseWriter, r *http.Request) {
 	tmpl, _ := template.ParseFiles("templates/index.html")
-	tmpl.Execute(w, "Hello World!"
+	tmpl.Execute(w, "Hello World!")
 	// log.Fatal(err)
 }
 
