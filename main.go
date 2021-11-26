@@ -1,6 +1,7 @@
 package main
 
 import (
+	"html/template"
 	"log"
 	"net/http"
 )
@@ -8,7 +9,9 @@ import (
 // Создается функция-обработчик "home", которая записывает байтовый слайс, содержащий
 // текст "Hello World!" как тело ответа.
 func home(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Hello World!"))
+
+	tmpl, _ := template.ParseFiles("templates/index.html")
+	tmpl.Execute(w, nil)
 }
 
 func main() {
