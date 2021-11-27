@@ -21,10 +21,7 @@ btn.addEventListener('click', e => {
     $.ajax({
         type: 'POST',
         url: `click`,
-        data: {
-            // 'csrfmiddlewaretoken': csrf[0].value,
-            'counter': counter,
-        },
+        data: {},
         success: function (response) {
             console.log(response)
         },
