@@ -3,6 +3,7 @@ console.log('This project is made by Artem and Anton ;-)')
 const btn = document.getElementById("btn-click")
 const textCounter = document.getElementById("text-count")
 const body = document.getElementById('body')
+// const csrf = document.getElementsByName('csrfmiddlewaretoken')
 
 let counter = 0
 
@@ -16,4 +17,19 @@ btn.addEventListener('click', e => {
         body.setAttribute('class', 'lighter')
     }
     // console.log('btn clicked: ', counter)
+
+    $.ajax({
+        type: 'POST',
+        url: `click`,
+        data: {
+            // 'csrfmiddlewaretoken': csrf[0].value,
+            'counter': counter,
+        },
+        success: function (response) {
+            console.log(response)
+        },
+        error: function (error) {
+            console.log(error)
+        }
+    })
 })
