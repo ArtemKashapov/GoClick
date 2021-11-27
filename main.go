@@ -1,7 +1,8 @@
 package main
 
 import (
-	// _ "github.com/lib/pq"
+	_ "github.com/lib/pq"
+	"strconv"
 
 	"database/sql"
 	"encoding/json"
@@ -48,29 +49,42 @@ func index_page(w http.ResponseWriter, r *http.Request) {
 
 func click_handler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
-		
+		countValue := insertValue()
+
 		fmt.Println("Receive ajax post data string ", json.NewDecoder(r.Body))
-		w.Write([]byte("Done!"))
+		fmt.Fprintf(w, strconv.Itoa(countValue))
 	}
 }
 
 func main() {
-	dbinfo := fmt.Sprintf("user=%s password=%s dbname=%s sslmode=disable",
-		DB_USER, DB_PASSWORD, DB_NAME)
-	db, err := sql.Open("postgres", dbinfo)
-	checkErr(err)
-	defer db.Close()
-
-	var lastInsertId int
-	err = db.QueryRow("INSERT INTO counter_info(counter) VALUES($1) returning id;", "1").Scan(&lastInsertId)
-	checkErr(err)
-	fmt.Println("last inserted id =", lastInsertId)
 
 	handleRequest()
 }
 
-func checkErr(err error) {
+func insertValue() (countValue int) {
+	db := dbConnection()
 
+	var value int
+	err := db.QueryRow("SELECT counter from counter_info WHERE id = $1;", 1).Scan(&value)
+	checkErr(err)
+
+	err = db.QueryRow("UPDATE counter_info SET counter=$1 WHERE id = $2 returning counter;", value+1, 1).Scan(&countValue)
+	checkErr(err)
+	fmt.Println("last inserted id =", countValue)
+	defer db.Close()
+
+	return
+}
+
+func dbConnection() (db *sql.DB) {
+	dbinfo := fmt.Sprintf("user=%s password=%s dbname=%s sslmode=disable",
+		DB_USER, DB_PASSWORD, DB_NAME)
+	db, err := sql.Open("postgres", dbinfo)
+	checkErr(err)
+	return db
+}
+
+func checkErr(err error) {
 	if err != nil {
 		panic(err)
 	}
