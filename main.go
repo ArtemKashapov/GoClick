@@ -8,7 +8,7 @@ import (
 
 func index_page(w http.ResponseWriter, r *http.Request) {
 	tmpl, err := template.ParseFiles("templates/index.html")
-	tmpl.Execute(w, "Hello World!")
+	tmpl.Execute(w, nil)
 
 	if err != nil {
 		log.Fatal(err)
