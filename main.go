@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func home(w http.ResponseWriter, r *http.Request) {
+func index_page(w http.ResponseWriter, r *http.Request) {
 	tmpl, err := template.ParseFiles("templates/index.html")
 	tmpl.Execute(w, "Hello World!")
 
@@ -16,9 +16,14 @@ func home(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleRequest() {
-	http.HandleFunc("/", home)
+	mux := http.NewServeMux()
+	mux.HandleFunc("/", index_page)
 	log.Println("Запуск сервера на http://127.0.0.1:8000")
-	err := http.ListenAndServe(":8000", nil)
+
+	fileServer := http.FileServer(http.Dir("./static/"))
+	mux.Handle("/static/", http.StripPrefix("/static", fileServer))
+
+	err := http.ListenAndServe(":8000", mux)
 	log.Fatal(err)
 }
 
