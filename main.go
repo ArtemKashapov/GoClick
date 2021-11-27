@@ -1,7 +1,7 @@
 package main
 
 import (
-	// _ "github.com/lib/pq"
+	_ "github.com/lib/pq"
 
 	"database/sql"
 	"encoding/json"
@@ -48,8 +48,10 @@ func index_page(w http.ResponseWriter, r *http.Request) {
 
 func click_handler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
-		
+		// При попадании сюда программы надо увеличить каунтер
 		fmt.Println("Receive ajax post data string ", json.NewDecoder(r.Body))
+
+		// Сюда надо передать количество кликов в бд
 		w.Write([]byte("Done!"))
 	}
 }
