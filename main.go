@@ -16,15 +16,24 @@ const (
 	DB_NAME     = "postgres"
 )
 
-func home(w http.ResponseWriter, r *http.Request) {
-	tmpl, _ := template.ParseFiles("templates/index.html")
+func index_page(w http.ResponseWriter, r *http.Request) {
+	tmpl, err := template.ParseFiles("templates/index.html")
 	tmpl.Execute(w, nil)
+
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 func handleRequest() {
-	http.HandleFunc("/", home)
-	log.Println("Запуск веб-сервера на http://127.0.0.1:8000")
-	err := http.ListenAndServe(":8000", nil)
+	mux := http.NewServeMux()
+	mux.HandleFunc("/", index_page)
+	log.Println("Запуск сервера на http://127.0.0.1:8000")
+
+	fileServer := http.FileServer(http.Dir("./static/"))
+	mux.Handle("/static/", http.StripPrefix("/static", fileServer))
+
+	err := http.ListenAndServe(":8000", mux)
 	log.Fatal(err)
 }
 
