@@ -1,11 +1,10 @@
 package main
 
 import (
-	_ "github.com/lib/pq"
-<<<<<<< HEAD
-=======
+	"encoding/json"
 	"strconv"
->>>>>>> 94466ba288587c31ad52150014afa9e5e420446a
+
+	_ "github.com/lib/pq"
 
 	"database/sql"
 	"fmt"
@@ -62,18 +61,10 @@ func result_page(w http.ResponseWriter, r *http.Request) {
 
 func click_handler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
-<<<<<<< HEAD
-		// При попадании сюда программы надо увеличить каунтер
-		// fmt.Println("Receive ajax post data string ", json.NewDecoder(r.Body))
-
-		// Сюда надо передать количество кликов в бд
-		w.Write([]byte("Done!"))
-=======
 		countValue := insertValue()
 
 		fmt.Println("Receive ajax post data string ", json.NewDecoder(r.Body))
 		fmt.Fprintf(w, strconv.Itoa(countValue))
->>>>>>> 94466ba288587c31ad52150014afa9e5e420446a
 	}
 }
 
