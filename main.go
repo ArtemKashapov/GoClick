@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"strconv"
 
 	_ "github.com/lib/pq"
@@ -63,7 +62,7 @@ func click_handler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		countValue := insertValue()
 
-		fmt.Println("Receive ajax post data string ", json.NewDecoder(r.Body))
+		// fmt.Println("Receive ajax post data string ", json.NewDecoder(r.Body))
 		fmt.Fprintf(w, strconv.Itoa(countValue))
 	}
 }
@@ -82,7 +81,7 @@ func insertValue() (countValue int) {
 
 	err = db.QueryRow("UPDATE counter_info SET counter=$1 WHERE id = $2 returning counter;", value+1, 1).Scan(&countValue)
 	checkErr(err)
-	fmt.Println("last inserted id =", countValue)
+	// fmt.Println("last inserted id =", countValue)
 	defer db.Close()
 
 	return
