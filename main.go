@@ -1,6 +1,8 @@
 package main
 
 import (
+	"encoding/xml"
+	"io/ioutil"
 	"strconv"
 
 	_ "github.com/lib/pq"
@@ -40,9 +42,7 @@ func handleRequest() {
 
 func index_page(w http.ResponseWriter, r *http.Request) {
 	tmpl, err := template.ParseFiles("templates/index.html")
-
 	tmpl.Execute(w, nil)
-
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -50,7 +50,7 @@ func index_page(w http.ResponseWriter, r *http.Request) {
 
 func result_page(w http.ResponseWriter, r *http.Request) {
 	tmpl, err := template.ParseFiles("templates/result.html")
-
+	doc2XML()
 	tmpl.Execute(w, nil)
 
 	if err != nil {
@@ -61,25 +61,34 @@ func result_page(w http.ResponseWriter, r *http.Request) {
 func click_handler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		countValue := insertValue()
-
-		doc2XML()
-		fmt.Println("success")
-		// fmt.Println("Receive ajax post data string ", json.NewDecoder(r.Body))
 		fmt.Fprintf(w, strconv.Itoa(countValue))
 	}
 }
 
 func main() {
-
 	handleRequest()
 }
 
 func doc2XML() {
 	db := dbConnection()
-
-	db.QueryRow("COPY(SELECT query_to_xml('SELECT counter FROM counter_info', true , false, '')) TO '/counter123.xml';")
-
 	defer db.Close()
+
+	var value int
+	err := db.QueryRow("SELECT counter from counter_info WHERE id = $1;", 1).Scan(&value)
+	checkErr(err)
+
+	type Clicks struct {
+		XMLName xml.Name `xml:"clicker_count"`
+		Clicks 	int `xml:"clicks"`
+	}
+
+	v := &Clicks{Clicks: value}
+
+	output, err := xml.MarshalIndent(v, "  ", "    ")
+	checkErr(err)
+
+	// os.Stdout.Write(output)
+	_ = ioutil.WriteFile("data/click_count.xml", output, 0644)
 }
 
 func insertValue() (countValue int) {
