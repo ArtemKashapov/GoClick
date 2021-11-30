@@ -10,10 +10,20 @@
     <link href='/static/css/style.css' rel="stylesheet">
 </head>
 <body>
-    <a href="#" class="download-center">Выгрузка XMl</a>
+    <div class="download-center">
+        <ul style="list-style: none;">
+            <li><h>Для выгрузки нажмите на соответствующую иконку:</h></li>
+            <li><a id="download-btn" href="#" style="margin-left: 35%;">
+                <img src="https://lh3.googleusercontent.com/proxy/1lE7uoSDAUqufGCslBo59Tfer5xUs5i-uFeWgfNXpSLDdcCZeqUPsidQxu9NZapKinBmXwb9ET3_v85SvjiL3zu9tOZmKK8qPEaJOMlNiuDleaUU9WpMVekKh6p3Ktqwp5CsxMmpEQ" style="width:100px">
+                    </img>
+                </a>
+            </li>
+        </ul>        
+    </div>
     <canvas id="c"></canvas>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.js"></script>
-    <script src="backend.js" charset="utf-8"></script>
+    <!-- <script src="backend.js" charset="utf-8"></script> -->
     <script src="../static/js/boom.js"></script>
+    <script src="../static/js/result.js"></script>
 </body>
 </html>

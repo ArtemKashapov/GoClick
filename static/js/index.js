@@ -3,7 +3,6 @@ console.log('This project is made by Artem and Anton ;-)')
 const btn = document.getElementById("btn-click")
 const textCounter = document.getElementById("text-count")
 const body = document.getElementById('body')
-// const csrf = document.getElementsByName('csrfmiddlewaretoken')
 
 let counter
 
@@ -33,6 +32,4 @@ btn.addEventListener('click', e => {
 
      */
     // console.log('btn clicked: ', counter)
-
-
 })
