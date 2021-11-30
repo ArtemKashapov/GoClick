@@ -62,6 +62,8 @@ func click_handler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		countValue := insertValue()
 
+		doc2XML()
+		fmt.Println("success")
 		// fmt.Println("Receive ajax post data string ", json.NewDecoder(r.Body))
 		fmt.Fprintf(w, strconv.Itoa(countValue))
 	}
@@ -70,6 +72,14 @@ func click_handler(w http.ResponseWriter, r *http.Request) {
 func main() {
 
 	handleRequest()
+}
+
+func doc2XML() {
+	db := dbConnection()
+
+	db.QueryRow("COPY(SELECT query_to_xml('SELECT counter FROM counter_info', true , false, '')) TO '/counter123.xml';")
+
+	defer db.Close()
 }
 
 func insertValue() (countValue int) {
